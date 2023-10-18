@@ -1,0 +1,25 @@
+Create a python class that enables <objective>, I need the following FUNCTION supoprt.
+
+FUNCTION
+
+__init()__
+func1()
+func2(with param)
+func3(with param) - explanation of the function
+
+Create a python class that enables operates on a postgres database suing psycopg2. I need the following FUNCTION supoprt.
+
+FUNCTION
+__init__()
+__enter__()
+__exit__()
+connect_with_url(url)
+upsert(table_name, _dict) - insert or update a row in a table if id is present in _dict
+delete(table_name, _id) - delete a row in a table by id
+get(table_name, _id) - get a row in a table by id
+get_all(table_name) - get all_rows in a table
+run_sql(sql) - run a sql statement
+get_table_definition(table_name) - get a table definition in a 'create table' format directly from postgres as a string
+get_all_table_names() - get all table names in the database as a list
+get_table_definition_for_prompt() - combine get_tables_definitions() and get_all_table_names() to get a list of tables definitions 
+in a 'create table' format for all tables in the database as a string that can be used for our llm prompt

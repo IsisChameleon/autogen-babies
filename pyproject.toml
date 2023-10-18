@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "autogen-babies"
+version = "0.1.0"
+description = "Experiments with Autogen"
+authors = ["IsisChameleon <12711084+IsisChameleon@users.noreply.github.com>"]
+readme = "README.md"
+packages = [
+    { include = "autogen_experiments", from = "src" }
+]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.12"
+autogen = "^1.0.16"
+openai = "^0.28.1"
+psycopg2-binary = "^2.9.9"
+argparse = "^1.4.0"
+python-dotenv = "^1.0.0"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.25.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+start-postgres-ai-agent = "autogen_experiments.postgres_ai_agent.main:main"
