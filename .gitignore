@@ -17,3 +17,4 @@ lib
 *.whl
 OAI_CONFIG_LIST*
 cache.db
+.aider*

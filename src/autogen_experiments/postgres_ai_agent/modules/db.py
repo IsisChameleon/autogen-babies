@@ -56,13 +56,37 @@ class PostgresDB:
             cursor.execute(sql_statement)
         self.conn.commit()
 
-    def get_table_definition(self, table_name):
+    def get_table_definition_old(self, table_name):
         query = "pg_dump -s -t {} -U {} {}".format(
             table_name,
             self.conn.info.user,
             self.conn.info.dbname
         )
         return query  # You would typically run this in a shell to get the create table statement
+    
+    def get_table_definition(self, table_name):
+        query = """
+        SELECT column_name, data_type, character_maximum_length, column_default, is_nullable
+        FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = %s;
+        """
+        table_def = f"CREATE TABLE {table_name} (\n"
+        with self.conn.cursor() as cursor:
+            cursor.execute(query, (table_name,))
+            for row in cursor:
+                column_name, data_type, max_length, default_value, is_nullable = row
+                if max_length:
+                    data_type = f"{data_type}({max_length})"
+                if default_value:
+                    default_value = f"DEFAULT {default_value}"
+                else:
+                    default_value = ""
+                if is_nullable == "NO":
+                    is_nullable = "NOT NULL"
+                else:
+                    is_nullable = "NULL"
+                table_def += f"  {column_name} {data_type} {default_value} {is_nullable},\n"
+        table_def = table_def.rstrip(",\n") + "\n);"
+        return table_def
 
     def get_all_table_names(self):
         query = "SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema';"

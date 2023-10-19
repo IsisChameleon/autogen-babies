@@ -15,8 +15,9 @@ def main():
     # connect to db using with statement and create a db_manager
     with PostgresDB() as db:
         db.connect_with_url(DATABASE_URL)
-        db.upsert("goals", {"id": 1, "goal_description": "fist goal"})
-        print(db.get("goals", 1))
+        db.upsert("goals", {"id": 1, "goal_description": "second goal"})
+        print(db.get_table_definition_for_prompt())
+        print(db.get_all("goals"))
 
 
     # call db_manager.get_table_definition_for_prompt() to get tables in prompt ready form
