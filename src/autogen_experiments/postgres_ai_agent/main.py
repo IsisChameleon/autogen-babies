@@ -21,6 +21,8 @@ def main():
     if not args.prompt:
         print("Please provide a prompt.")
         return
+    
+    prompt = f"Fulfill this database query: {args.prompt}."
 
     # connect to db using with statement and create a db_manager
     with PostgresDB() as db:
@@ -30,22 +32,22 @@ def main():
         table_definitions = db.get_table_definition_for_prompt()
 
         # create two blank calls to llm.add_cap_ref() that update our current prompt passed in from cli
-        prompt_with_ref = add_cap_ref(args.prompt, "Here are the table definitions:", "TABLE_DEFINITIONS", table_definitions)
-        prompt_with_ref = add_cap_ref(prompt_with_ref, "Please provide the SQL query using delimiter '------------'.", "SQL_QUERY:", "")
-        print('prompt_with_ref:',prompt_with_ref)
+        prompt_with_ref = add_cap_ref(prompt, "Here are the table definitions:", "TABLE_DEFINITIONS", table_definitions)
 
-        # call llm.prompt to get a prompt_response variable
-        prompt_response = prompt(prompt_with_ref)
-        print('prompt_response:',prompt_response)
+        # build the autogen gpt_configuration object
 
-        # parse sql response from prompt_response using SQL_QUERY_DELIMITER '------------'
-        sql_query = prompt_response.split('------------')[1].strip()
-        print("sql_query:" + sql_query)
+        # build the function map
 
-        # call db_manager.run_sql() with the parsed sql
-        print("-------- POSTGRES DATA ANALYTICS AI AGENT RESPONSE --------")
-        result = db.run_sql(sql_query)
-        print(result)
+        # create our terminate message function
+
+        # create a set of agents with specific roles
+            # admin user proxy agent - takes in the prompt and manages the group chat
+            # data engineer agent - generates the sql query
+            # sr data analyst agent - run the sql query and generates the response
+            # product manager - validate the response to make sure it's correct
+
+        # create a group chat and initiate the chat
+        
 
 if __name__ == '__main__':
     main()
