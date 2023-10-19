@@ -52,9 +52,15 @@ class PostgresDB:
             return cursor.fetchall()
 
     def run_sql(self, sql_statement):
+        result = None
         with self.conn.cursor() as cursor:
             cursor.execute(sql_statement)
+            if cursor.description:  # Checks if the statement returns data (e.g., a SELECT statement)
+                result = cursor.fetchall()
+                print("result :",result)
         self.conn.commit()
+        return result
+
 
     def get_table_definition_old(self, table_name):
         query = "pg_dump -s -t {} -U {} {}".format(
