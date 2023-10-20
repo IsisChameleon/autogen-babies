@@ -105,6 +105,7 @@ def main():
     )
 
     # Physical trainer
+    PHYSICAL_TRAINER_PROMPT = "Physical Trainer. You provide the physical training plan. You don't write code."
     physical_trainer = AssistantAgent(
         name="Physical_Trainer",
         llm_config=gpt4_config,
@@ -115,6 +116,7 @@ def main():
     )
 
     # Nutritionist
+    NUTRITIONIST_PROMPT = "Nutritionist. You provide the nutrition plan. You don't write code."
     nutritionist = AssistantAgent(
         name="Nutritionist",
         llm_config=gpt4_config,
@@ -125,6 +127,7 @@ def main():
     )
 
     # Sport psychologist
+    SPORT_PSYCHOLOGIST_PROMPT = "Sport Psychologist. You provide mental health advice and motivation. You don't write code."
     sport_psychologist = AssistantAgent(
         name="Sport_Psychologist",
         llm_config=gpt4_config,
@@ -135,6 +138,7 @@ def main():
     )
 
     # Data scientist to track and analyse fitness data
+    DATA_SCIENTIST_PROMPT = "Data Scientist. You track and analyze fitness data. You don't write code."
     data_scientist = AssistantAgent(
         name="Data_Scientist",
         llm_config=gpt4_config,
