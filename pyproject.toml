@@ -11,7 +11,7 @@ packages = [
 [tool.poetry.dependencies]
 python = ">=3.11,<3.12"
 autogen = "^1.0.16"
-openai = "^0.28.1"
+openai = ">=0.27.6"
 psycopg2-binary = "^2.9.9"
 argparse = "^1.4.0"
 python-dotenv = "^1.0.0"
@@ -19,6 +19,7 @@ python-dotenv = "^1.0.0"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.25.2"
+aider-chat = "^0.14.2"
 
 [build-system]
 requires = ["poetry-core"]
@@ -26,3 +27,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 start-postgres-ai-agent = "autogen_experiments.postgres_ai_agent.main:main"
+start-ai-coach = "autogen_experiments.ai_coach.main:main"
