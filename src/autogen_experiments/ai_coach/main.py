@@ -96,20 +96,63 @@ def main():
     # First agent:
     # admin user proxy agent - takes in the user request and manages the group chat. It will take the user to talk
     # to all the specialists and get the final plan approved.
-
+    user_proxy = UserProxyAgent(
+        name="Admin",
+        system_message=USER_PROXY_PROMPT,
+        code_execution_config=False,
+        human_input_mode="NEVER",
+        is_termination_msg=is_termination_message,
+    )
 
     # Physical trainer
-
+    physical_trainer = AssistantAgent(
+        name="Physical_Trainer",
+        llm_config=gpt4_config,
+        system_message=PHYSICAL_TRAINER_PROMPT,
+        code_execution_config=False,
+        human_input_mode="NEVER",
+        is_termination_msg=is_termination_message,
+    )
 
     # Nutritionist
-
+    nutritionist = AssistantAgent(
+        name="Nutritionist",
+        llm_config=gpt4_config,
+        system_message=NUTRITIONIST_PROMPT,
+        code_execution_config=False,
+        human_input_mode="NEVER",
+        is_termination_msg=is_termination_message,
+    )
 
     # Sport psychologist
+    sport_psychologist = AssistantAgent(
+        name="Sport_Psychologist",
+        llm_config=gpt4_config,
+        system_message=SPORT_PSYCHOLOGIST_PROMPT,
+        code_execution_config=False,
+        human_input_mode="NEVER",
+        is_termination_msg=is_termination_message,
+    )
 
     # Data scientist to track and analyse fitness data
-
+    data_scientist = AssistantAgent(
+        name="Data_Scientist",
+        llm_config=gpt4_config,
+        system_message=DATA_SCIENTIST_PROMPT,
+        code_execution_config=False,
+        human_input_mode="NEVER",
+        is_termination_msg=is_termination_message,
+    )
 
     # create a group chat and initiate the chat
+    groupchat = GroupChat(agents=[user_proxy, physical_trainer, nutritionist, sport_psychologist, data_scientist], messages=[], max_round=10)
+    manager = GroupChatManager(groupchat=groupchat, llm_config=gpt4_config)
+
+    user_proxy.initiate_chat(
+        manager,
+        clear_history=True,
+        message=prompt,
+    )
 
         
 
