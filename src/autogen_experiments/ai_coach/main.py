@@ -1,7 +1,7 @@
 import os
 import dotenv
-import autogen
-from .modules.db import PostgresDB
+# import autogen
+# from .modules.db import PostgresDB
 
 from autogen.agentchat import GroupChatManager, UserProxyAgent, AssistantAgent, GroupChat
 from autogen.oai import config_list_from_models
@@ -70,25 +70,27 @@ def main():
             return True
         return False
     
-    # COMPLETION_PROMPT = "If everything looks good, respond with APPROVED"
-    # USER_PROXY_PROMPT = (
-    #     "A human admin. Interact with the planner to discuss the plan. Plan execution needs to be approved by this admin."
-    #     + COMPLETION_PROMPT
-    # )
-    # DATA_ENGINEER_PROMPT = (
-    #     """Data Engineer. You follow an approved plan. You write SQL queries to solve tasks. Wrap the code in a code block that specifies the script type. The user can't modify your code. So do not suggest incomplete code which requires others to modify. Don't use a code block if it's not intended to be executed by the executor.
-    # Don't include multiple code blocks in one response. Do not ask others to copy and paste the result. Check the execution result returned by the executor.
-    # If the result indicates there is an error, fix the error and output the code again. Suggest the full code instead of partial code or code changes. If the error can't be fixed or if the task is not solved even after the code is executed successfully, analyze the problem, revisit your assumption, collect additional info you need, and think of a different approach to try."""
-    #     + COMPLETION_PROMPT
-    # )
-    # DATA_ANALYST_PROMPT = (
-    #     """Data Analyst. You follow an approved plan. You execute SQL queries and analyze the results. You don't write code."""
-    #     + COMPLETION_PROMPT
-    # )
-    # PRODUCT_MANAGER_PROMPT = (
-    #     """Product Manager. Validate the response to make sure it's correct. Provide feedback to the team and guide the project direction."""
-    #     + COMPLETION_PROMPT
-    # )
+    COMPLETION_PROMPT = "If everything looks good, respond with APPROVED"
+    USER_PROXY_PROMPT = (
+        "A human admin. Interact with the agents to set goals and define human training plan. Plan execution needs to be approved by this admin."
+        + COMPLETION_PROMPT
+    )
+    PHYSICAL_TRAINER_PROMPT = (
+        "Physical Trainer. You Create a tailored workout regimen based on the individual’s goals, current fitness level, and mobility assessment. Adapt the plan as per feedback from the data analyst. You don't write code."
+        + COMPLETION_PROMPT
+    )
+    NUTRITIONIST_PROMPT =  (
+        "Nutritionist. Analyze dietary habits, suggest modifications based on the individual’s goals, and monitor adherence to the dietary plan through available data. You don't write code."
+        + COMPLETION_PROMPT
+    )
+    SPORT_PSYCHOLOGIST_PROMPT =  (
+        "Sport Psychologist. You provide mental health advice and motivation.  Offer cognitive-behavioral strategies and mindfulness techniques to overcome mental barriers to training. You don't write code."
+        + COMPLETION_PROMPT
+    )
+    DATA_SCIENTIST_PROMPT =  (
+        "Data Scientist. Set up a system for tracking workouts, nutrition, and other relevant metrics, analyzing this data to suggest optimizations to the training and nutrition plans. You track and analyze fitness data. You don't write code."
+        + COMPLETION_PROMPT
+    )
 
     # Using Autogen library define a set of agents with specific roles to help to user clarify training 
     # goal and devise a very detailed day by day training plan. Assign each agent a specific duty.
@@ -100,12 +102,11 @@ def main():
         name="Admin",
         system_message=USER_PROXY_PROMPT,
         code_execution_config=False,
-        human_input_mode="NEVER",
+        human_input_mode="ALWAYS",
         is_termination_msg=is_termination_message,
     )
 
     # Physical trainer
-    PHYSICAL_TRAINER_PROMPT = "Physical Trainer. You provide the physical training plan. You don't write code."
     physical_trainer = AssistantAgent(
         name="Physical_Trainer",
         llm_config=gpt4_config,
@@ -116,7 +117,6 @@ def main():
     )
 
     # Nutritionist
-    NUTRITIONIST_PROMPT = "Nutritionist. You provide the nutrition plan. You don't write code."
     nutritionist = AssistantAgent(
         name="Nutritionist",
         llm_config=gpt4_config,
@@ -127,7 +127,6 @@ def main():
     )
 
     # Sport psychologist
-    SPORT_PSYCHOLOGIST_PROMPT = "Sport Psychologist. You provide mental health advice and motivation. You don't write code."
     sport_psychologist = AssistantAgent(
         name="Sport_Psychologist",
         llm_config=gpt4_config,
@@ -138,7 +137,6 @@ def main():
     )
 
     # Data scientist to track and analyse fitness data
-    DATA_SCIENTIST_PROMPT = "Data Scientist. You track and analyze fitness data. You don't write code."
     data_scientist = AssistantAgent(
         name="Data_Scientist",
         llm_config=gpt4_config,
@@ -156,9 +154,7 @@ def main():
         manager,
         clear_history=True,
         message=prompt,
-    )
-
-        
+    )       
 
 if __name__ == '__main__':
     main()
